@@ -1,112 +1,61 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView, FlatList } from 'react-native';
-
+import ContatoItem from './components/ContatoItem';
+import ContatoInput from './components/ContatoInput';
 export default function App() {
-	const[nome, setNome] = useState ('');
-	const[nomes, setNomes] = useState([]);
-	const[telefone, setTelefone] = useState ('');
-	const[telefones, setTelefones] = useState([]);
+	const[id, setId] = useState ('');
+	const[contatos, setContatos] = useState([]);
+	const[contadorContatos, setContadorContatos] = useState(0);
+
 	
-	const[contadorNomes, setContadorNomes] = useState(0);
-	const[contadorTelefones, setContadorTelefones] = useState(0);
-	
-	
-	const capturarNome = (nome) => {
-		setNome(nome);
-	};
-	
-	const capturarTelefone = (telefone) => {
-		setTelefone(telefone);
-	};
-	
-	
-	
-	const adicionarNome = () => {
-		setNomes(nomes => {
-			console.log(nomes);
-			setContadorNomes(contadorNomes + 1);
-			return[{key: contadorNomes.toString(), value: nome}, ...nomes];
+	const adicionarContato = (nome, numero) => {
+		contato = (id, nome, numero);
+		
+		setContatos((contatos) => {
+			console.log(contatos);
+			setContadorContatos(contadorContatos + 1);
+		return[...contatos, {key:contadorContatos.toString(), value: contato=(id), value2: contato=(nome), value3: contato=(numero)}];
 		})
 	};
 	
-	const adicionarTelefone = () => {
-		setTelefones(telefones => {
-			console.log(telefones);
-			setContadorTelefones(contadorTelefones + 1);
-			return[{key: contadorTelefones.toString(), value: telefone}, ...telefones];
-		})
+	
+	const removerContato = (keyASerRemovida)=>{
+		setContatos(contatos=>{
+			return contatos.filter((contato)=>{
+				contato.key !== keyASerRemovida
+			})
+		});
 	};
 	
-	const btnClick = () => {
-		adicionarNome();
-		adicionarTelefone();
-		
-	};
-	
-  return (
-    <View style={styles.telaPrincipalView}>
-		
-		<View style={styles.nomeView}>
-		{/* usuário irá inserir os contatos aqui*/}
-		
-			<TextInput 
-				placeholder="Nome..."
-				style={styles.nomeInputText}
-				onChangeText={capturarNome}
-				value={nome}
-			/>
-			
-			<TextInput 
-				placeholder="Telefone..."
-				style={styles.nomeInputText}
-				onChangeText={capturarTelefone}
-				value={telefone}
-			/>
-			
-			<Button 
-				title="Adicionar Contato"
-				  onPress={btnClick}
-			/>
-		
-		</View>
-	
-		<FlatList
-			data={nomes}
-			renderItem={
-			nome => (
-			<View style={styles.itemNaLista}>
-				<Text>{"Nome: " + nome.item.value}</Text>
-			</View>
-			)
-			}
-		/>
-		
-		<FlatList
-			data={telefones}
-			renderItem={
-			telefone => (
-			<View style={styles.itemNaLista}>
-				<Text>{"Telefone: " + telefone.item.value}</Text>
-			</View>
-			)
-			}
-		/>
-	</View>
+	return(
+	<View style={styles.telaPrincipalView}>
+      <View style={{padding:12,backgroundColor:'#ccd9ff',borderColor:'#000',borderRadius:6}}><Text>Contatos</Text></View>
+      <ContatoInput onAdicionarContato={adicionarContato}/>
+      <FlatList
+      data={contatos}
+      renderItem={
+      contato => (
+        <ContatoItem id={contato.item.value} nome={contato.item.value2} numero={contato.item.value3} 
+        onDelete={removerContato}/>
+      )}/>
+    </View>
   );
 }
 
+  
+  
 const styles = StyleSheet.create(
 	{
 		telaPrincipalView: {
 			padding: 50
 		},
-		nomeView: {
+		contatosView: {
 			flexDirection: 'column',
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginBottom: 8
 		},
-		nomeInputText: {
+		contatosInputText: {
 			width: '80%',
 			borderBottomColor: 'black',
 			borderBottomColor: 1,
